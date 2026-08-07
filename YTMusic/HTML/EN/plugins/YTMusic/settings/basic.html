@@ -1,0 +1,35 @@
+[% PROCESS settings/header.html %]
+
+[% WRAPPER setting title="PLUGIN_YTMUSIC_AUTH_STATUS" desc="PLUGIN_YTMUSIC_AUTH_STATUS_DESC" %]
+<strong style="color: [% ytmusic_authenticated ? '#2a7d2a' : '#aa3333' %];">[% ytmusic_auth_status_text %]</strong>
+[% END %]
+
+[% IF ytmusic_auth_warning %]
+<div class="settings-warning">[% ytmusic_auth_warning %]</div>
+[% END %]
+
+[% WRAPPER setting title="PLUGIN_YTMUSIC_AUTH_HEADERS" desc="PLUGIN_YTMUSIC_AUTH_HEADERS_DESC" %]
+<textarea name="pref_ytmusic_auth_headers" id="pref_ytmusic_auth_headers" rows="5" cols="70"></textarea>
+[% END %]
+
+[% WRAPPER setting title="PLUGIN_YTMUSIC_REPLAYGAIN_ENABLED" desc="PLUGIN_YTMUSIC_REPLAYGAIN_ENABLED_DESC" %]
+<input type="checkbox" name="pref_replaygain_enabled" id="pref_replaygain_enabled" value="1" [% IF prefs.pref_replaygain_enabled %]checked="checked"[% END %]>
+[% END %]
+
+[% WRAPPER setting title="PLUGIN_YTMUSIC_REPLAYGAIN_MIN_VOLUME" desc="PLUGIN_YTMUSIC_REPLAYGAIN_MIN_VOLUME_DESC" %]
+<input type="text" name="pref_replaygain_min_volume" id="pref_replaygain_min_volume" size="5" value="[% prefs.pref_replaygain_min_volume %]">
+[% END %]
+
+[% WRAPPER setting title="PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_PERCENT" desc="PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_PERCENT_DESC" %]
+<input type="text" name="pref_gain_deep_analysis_percent" id="pref_gain_deep_analysis_percent" size="5" value="[% prefs.pref_gain_deep_analysis_percent %]">%
+[% END %]
+
+[% WRAPPER setting title="PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE" desc="PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE_DESC" %]
+<select name="pref_gain_deep_analysis_mode" id="pref_gain_deep_analysis_mode">
+	<option value="quick" [% IF prefs.pref_gain_deep_analysis_mode == 'quick' %]selected="selected"[% END %]>[% ytmusic_mode_quick_label %]</option>
+	<option value="half" [% IF prefs.pref_gain_deep_analysis_mode == 'half' %]selected="selected"[% END %]>[% ytmusic_mode_half_label %]</option>
+	<option value="full" [% IF prefs.pref_gain_deep_analysis_mode == 'full' %]selected="selected"[% END %]>[% ytmusic_mode_full_label %]</option>
+</select>
+[% END %]
+
+[% PROCESS settings/footer.html %]

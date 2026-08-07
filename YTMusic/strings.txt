@@ -1,0 +1,115 @@
+PLUGIN_YTMUSIC
+	EN	YTMusic
+	PL	YTMusic
+
+PLUGIN_YTMUSIC_SEARCH
+	EN	Search
+	PL	Szukaj
+
+PLUGIN_YTMUSIC_RADIO
+	EN	Radio (based on current track)
+	PL	Radio (na bazie aktualnego utworu)
+
+PLUGIN_YTMUSIC_SEARCH_FOR
+	EN	Search for
+	PL	Szukaj
+
+PLUGIN_YTMUSIC_DSTM_RADIO
+	EN	YTMusic Radio (based on last track)
+	PL	YTMusic Radio (na bazie ostatniego utworu)
+
+PLUGIN_YTMUSIC_DSTM_MIX
+	EN	YTMusic Mix (based on several tracks in queue)
+	PL	YTMusic Mix (na bazie kilku utworów w kolejce)
+
+PLUGIN_YTMUSIC_PLAYLISTS
+	EN	My Playlists
+	PL	Moje playlisty
+
+PLUGIN_YTMUSIC_LIBRARY_SONGS
+	EN	Liked Songs
+	PL	Polubione utwory
+
+PLUGIN_YTMUSIC_HOME
+	EN	Recommended
+	PL	Polecane
+
+PLUGIN_YTMUSIC_SETTINGS_DESC
+	EN	Replay Gain settings for YouTube Music. Calculating gain requires full audio extraction and loudness analysis (ffmpeg loudnorm), which puts load on the bridge's CPU - the options below let you limit that.
+	PL	Ustawienia Replay Gain dla YouTube Music. Liczenie gainu wymaga pełnej ekstrakcji audio i analizy głośności (ffmpeg loudnorm), co obciąża CPU bridge'a - poniższe opcje pozwalają to ograniczyć.
+
+PLUGIN_YTMUSIC_AUTH_STATUS
+	EN	YTMusic login
+	PL	Logowanie do YTMusic
+
+PLUGIN_YTMUSIC_AUTH_STATUS_DESC
+	EN	Authentication status of the bridge against YouTube Music. Without logging in, search and playback still work, but your playlists and liked songs are unavailable.
+	PL	Status uwierzytelnienia bridge'a wobec YouTube Music. Bez zalogowania działa wyszukiwanie i odtwarzanie, ale niedostępne są Twoje playlisty i polubione utwory.
+
+PLUGIN_YTMUSIC_AUTH_LOGGED_IN
+	EN	Logged in
+	PL	Zalogowano
+
+PLUGIN_YTMUSIC_AUTH_LOGGED_OUT
+	EN	Not logged in
+	PL	Nie zalogowano
+
+PLUGIN_YTMUSIC_AUTH_SAVED_OK
+	EN	YTMusic login data saved.
+	PL	Zapisano dane logowania YTMusic.
+
+PLUGIN_YTMUSIC_AUTH_SAVED_FAIL
+	EN	Failed to save login data:
+	PL	Nie udało się zapisać danych logowania:
+
+PLUGIN_YTMUSIC_AUTH_HEADERS
+	EN	Log in to YTMusic (paste cookie)
+	PL	Zaloguj YTMusic (wklej cookie)
+
+PLUGIN_YTMUSIC_AUTH_HEADERS_DESC
+	EN	Open music.youtube.com signed in to your Google account, open Developer Tools (F12) -> Network tab, refresh the page, click any POST request to youtubei/v1/browse -> Headers tab -> Request Headers -> find the "cookie" row -> hover over it and click the copy icon next to the row (or manually select just the value after the colon and copy it). Paste ONLY that value below - the rest of the required headers are generated automatically. After saving the settings, the field will be cleared - the data is not stored anywhere outside the bridge's local file.
+	PL	Otwórz music.youtube.com zalogowany na swoje konto Google, otwórz Narzędzia deweloperskie (F12) -> zakładka Network, odśwież stronę, kliknij dowolne żądanie POST do youtubei/v1/browse -> zakładka Headers -> Request Headers -> znajdź wiersz "cookie" -> najedź na niego myszą i kliknij ikonkę kopiowania przy wierszu (albo zaznacz ręcznie samą wartość po dwukropku i skopiuj). Wklej TYLKO tę wartość poniżej - reszta potrzebnych nagłówków jest dobierana automatycznie. Po zapisaniu ustawień pole zostanie wyczyszczone - dane nie są nigdzie przechowywane poza plikiem lokalnym bridge'a.
+
+PLUGIN_YTMUSIC_REPLAYGAIN_ENABLED
+	EN	Enable Replay Gain
+	PL	Włącz Replay Gain
+
+PLUGIN_YTMUSIC_REPLAYGAIN_ENABLED_DESC
+	EN	If disabled, gain is neither calculated nor prefetched for any track.
+	PL	Jeśli wyłączone, gain nie jest liczony ani prefetchowany dla żadnego utworu.
+
+PLUGIN_YTMUSIC_REPLAYGAIN_MIN_VOLUME
+	EN	Minimum volume for gain calculation
+	PL	Minimalna głośność dla liczenia gainu
+
+PLUGIN_YTMUSIC_REPLAYGAIN_MIN_VOLUME_DESC
+	EN	Gain will only be calculated when at least one connected player has volume above this value (0-100). Set to 0 to always calculate gain, regardless of volume.
+	PL	Gain będzie liczony tylko gdy przynajmniej jeden podłączony gracz ma głośność powyżej tej wartości (0-100). Ustaw 0, żeby liczyć gain zawsze, niezależnie od głośności.
+
+PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_PERCENT
+	EN	Listening threshold for deep analysis
+	PL	Próg odsłuchania dla głębokiej analizy
+
+PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_PERCENT_DESC
+	EN	After what percentage of ACTUAL listening time (not just being queued, excluding pause time) a more precise gain analysis is triggered (see scope below). If you skip the track before reaching this threshold, the analysis does not happen - zero extra CPU load.
+	PL	Po ilu procentach RZECZYWISTEGO odsłuchania utworu (nie samego dodania do kolejki, liczone bez czasu pauzy) zostaje zamówiona dokładniejsza analiza gainu (patrz zakres poniżej). Jeśli przeskoczysz utwór przed przekroczeniem tego progu, analiza się nie odbywa - zero dodatkowego obciążenia CPU.
+
+PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE
+	EN	Deep analysis scope
+	PL	Zakres głębokiej analizy
+
+PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE_DESC
+	EN	How precisely to analyze the track once the listening threshold above is exceeded. "25 seconds" means no deepening - the track keeps the gain calculated as on first playback, effectively disabling the mechanism. "Half the track" is faster, but may miss a strong intro in the second half. "Whole track" is the most accurate (correct integrated EBU R128 loudness regardless of where the loud passage is in the track), at the cost of a longer, one-time background analysis. Applies ONLY to deep analysis - the quick, initial measurement (prefetch/first playback) always uses the first 25 seconds, regardless of this setting.
+	PL	Jak dokładnie analizować utwór po przekroczeniu progu odsłuchania powyżej. "25 sekund" oznacza brak pogłębiania - utwór zostaje z gainem policzonym jak przy pierwszym odtworzeniu, mechanizm jest wtedy efektywnie wyłączony. "Połowa utworu" jest szybsza, ale może nie złapać mocnego wejścia w drugiej połowie. "Cały utwór" jest najdokładniejszy (poprawna zintegrowana głośność EBU R128 niezależnie od tego, gdzie w utworze jest mocny fragment), kosztem dłuższej, jednorazowej analizy działającej w tle. Dotyczy TYLKO głębokiej analizy - szybki, wstępny pomiar (prefetch/pierwsze odtworzenie) zawsze używa pierwszych 25 sekund, niezależnie od tego ustawienia.
+
+PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE_QUICK
+	EN	25 seconds (no deepening - disables the mechanism)
+	PL	25 sekund (nie pogłębiaj analizy - wyłącza mechanizm)
+
+PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE_HALF
+	EN	Half the track (faster, may miss a strong intro in the second half)
+	PL	Połowa utworu (szybsze, może nie złapać mocnego wejścia w drugiej połowie)
+
+PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE_FULL
+	EN	Whole track (most accurate, recommended)
+	PL	Cały utwór (najdokładniejsze, zalecane)

@@ -1,0 +1,16 @@
+<?xml version='1.0' standalone='yes'?>
+<extensions>
+  <targetApplication>
+    <minVersion>9.1</minVersion>
+    <maxVersion>*</maxVersion>
+    <id>SlimServer</id>
+  </targetApplication>
+  <optionsURL>plugins/YTMusic/settings/basic.html</optionsURL>
+  <creator>Paweł</creator>
+  <version>0.1.0</version>
+  <name>PLUGIN_YTMUSIC</name>
+  <description>YouTube Music bridge</description>
+  <defaultState>enabled</defaultState>
+  <module>Plugins::YTMusic::Plugin</module>
+  <icon>plugins/YTMusic/html/images/ytmusic.png</icon>
+</extensions>
