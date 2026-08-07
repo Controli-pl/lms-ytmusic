@@ -11,7 +11,7 @@
 			<desc lang="PL">Bridge do YouTube Music</desc>
 			<creator>Paweł</creator>
 			<url>https://github.com/Controli-pl/lms-ytmusic/releases/download/v0.1.1/YTMusic-0.1.1.zip</url>
-			<sha>1ccaeede6f74e4b5c019324a6de9c0568be97be3</sha>
+			<sha>0a302cb31bea83ff833010e47904c6b026c6e3a2</sha>
 			<category>musicservices</category>
 		</plugin>
 	</plugins>
