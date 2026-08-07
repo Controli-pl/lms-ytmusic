@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<extensions>
+	<details>
+		<title lang="EN">YTMusic Bridge Repository</title>
+	</details>
+	<plugins>
+		<plugin name="YTMusic" version="0.1.0" minTarget="9.1" maxTarget="*">
+			<title lang="EN">YTMusic</title>
+			<title lang="PL">YTMusic</title>
+			<desc lang="EN">YouTube Music bridge</desc>
+			<desc lang="PL">Bridge do YouTube Music</desc>
+			<creator>Paweł</creator>
+			<url>https://github.com/TWOJ_USER/TWOJE_REPO/releases/download/v0.1.0/YTMusic-0.1.0.zip</url>
+			<sha>7d0ea99cc7f88b249c6049373fccdcac344580f8</sha>
+			<category>musicservices</category>
+		</plugin>
+	</plugins>
+</extensions>
