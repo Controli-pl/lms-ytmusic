@@ -19,9 +19,6 @@ Korzystaj z niej na własne ryzyko i zgodnie z Warunkami korzystania z usługi Y
 - Serwer, na którym stoi LMS wraz z Home Assistant: Linux, x86-64 (amd64). Inne platformy (Raspberry Pi/ARM, macOS, Windows natywnie) nie są obecnie wspierane — patrz sekcja Ograniczenia.
 
 ## Jak to działa
-
-Wtyczka powstała na użytek prywatny, ale po kilku miesiącach testów i 
-
 Projekt się z dwóch części:
 
 - **Plugin LMS (Perl)** — integruje się z menu, kolejką odtwarzania, DSTM, ReplayGain i CLI/JSON-RPC LMS.
