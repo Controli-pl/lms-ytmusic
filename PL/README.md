@@ -1,4 +1,4 @@
-# YTMusic — wtyczka YouTube Music dla Lyrion Music Server (LMS)
+# YTMusic — wtyczka YouTube Music dla dodatku Lyrion Music Server (LMS) w Home Assistant OS.
 
 Wtyczka integrująca YouTube Music z Lyrion Music Server (dawniej Logitech/Squeezebox Server). Umożliwia przeglądanie, wyszukiwanie i odtwarzanie muzyki z YouTube Music na wszystkich graczach Squeezebox/LMS, z pełną obsługą ReplayGain i integracją z Home Assistant przez komendy CLI.
 
