@@ -228,6 +228,9 @@ Zwraca `min_volume` i `override`.
 3. W polu filtra wpisz `browse`.
 4. Kliknij na jakąś playlistę/bibliotekę, żeby wygenerować żądanie `POST .../browse?...`.
 5. Kliknij na to żądanie → **Headers** → **Request Headers** → skopiuj wartość klucza cookie ( patrz obrazek ).
+
+![Copying the cookie value from the request headers](https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/main/PL/INFO/cookie.png)
+
 6. Wklej skopiowaną wartość, zatwierdź. (zapisany plik przechowywany jest wyłącznie lokalnie na Twoim sprzęcie!)
 7. Wartość pola statusu powinna zmienić się na Zalogowano.
 
