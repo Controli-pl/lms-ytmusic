@@ -10,7 +10,7 @@ Po autoryzacji zyskujesz:
 
 | | | | | | |
 |---|---|---|---|---|---|
-| <img src="PL/INFO/1.jpg" width="250"> | <img src="PL/INFO/2.jpg" width="250"> | <img src="PL/INFO/3.jpg" width="250"> | <img src="PL/INFO/4.jpg" width="250"> | <img src="PL/INFO/5.jpg" width="250"> | <img src="PL/INFO/6.jpg" width="250"> |
+| <img src="INFO/1.jpg" width="250"> | <img src="INFO/2.jpg" width="250"> | <img src="INFO/3.jpg" width="250"> | <img src="INFO/4.jpg" width="250"> | <img src="INFO/5.jpg" width="250"> | <img src="INFO/6.jpg" width="250"> |
 
 ## Zastrzeżenie
 
