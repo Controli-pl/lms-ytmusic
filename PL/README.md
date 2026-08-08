@@ -214,9 +214,12 @@ Zwraca `min_volume` i `override`.
 ## Wymagania i instalacja
 
 1. **Instalacja przez repozytorium** — w LMS: Settings → Plugins → Additional Repositories, wklej adres repo:
+   
    https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/refs/heads/main/YTMusic/repo.xml
+   
    zapisz i odśwież listę wtyczek. Zainstaluj "YTMusic" z listy.
-3. **Uwierzytelnienie YouTube Music** (wymagane do: playlist, polubionych utworów, polubienia, szybkiego zapisu, dodawania do playlist — wyszukiwanie i odtwarzanie działają bez tego).
+   
+2. **Uwierzytelnienie YouTube Music** (wymagane do: playlist, polubionych utworów, polubienia, szybkiego zapisu, dodawania do playlist — wyszukiwanie i odtwarzanie działają bez tego).
 
 ### Generowanie pliku uwierzytelniania
 
