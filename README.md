@@ -214,8 +214,13 @@ Returns `min_volume` and `override`.
 
 ## Requirements and installation
 
-1. **Installation via repository** — in LMS: Settings → Plugins → Additional Repositories, paste the repo address (https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/refs/heads/main/YTMusic/repo.xml), save, and refresh the plugin list. Install "YTMusic" from the list.
-2. **YouTube Music authentication** (required for: playlists, liked tracks, liking, quick save, adding to playlists — search and playback work without it).
+1. **Installation via repository** — in LMS: Settings → Plugins → Additional Repositories, paste the repo address:
+
+   https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/refs/heads/main/YTMusic/repo.xml
+
+   save, and refresh the plugin list. Install "YTMusic" from the list.
+   
+3. **YouTube Music authentication** (required for: playlists, liked tracks, liking, quick save, adding to playlists — search and playback work without it).
 
 ### Generating the authentication file
 
