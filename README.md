@@ -20,9 +20,6 @@ Use it at your own risk and in accordance with YouTube's Terms of Service. The c
 - A server running LMS together with Home Assistant: Linux, x86-64 (amd64). Other platforms (Raspberry Pi/ARM, macOS, native Windows) are not currently supported — see the Limitations section.
 
 ## How it works
-
-The plugin was originally created for private use, but after several months of testing and
-
 The project consists of two parts:
 
 - **LMS Plugin (Perl)** — integrates with the menu, playback queue, DSTM, ReplayGain, and the LMS CLI/JSON-RPC interface.
