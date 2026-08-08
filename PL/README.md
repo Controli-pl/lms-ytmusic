@@ -227,3 +227,13 @@ Zwraca `min_volume` i `override`.
 7. Wartość pola statusu powinna zmienić się na Zalogowano.
 
 **Uwaga:** token uwierzytelniający wygasa po pewnym czasie. Jeśli funkcje wymagające logowania zaczną zwracać błąd "auth?" w logach, powtórz powyższe kroki.
+
+## Wsparcie i opinie
+
+Nie jestem zawodowym programistą — to projekt hobbystyczny, który stworzyłem na własny użytek. Jeśli masz rozsądne sugestie, prośby o nowe funkcje lub natkniesz się na błędy, śmiało zgłoś problem, a postaram się pomóc. Mimo to, mój wolny czas jest ograniczony (i szczerze mówiąc, prawdopodobnie powinienem skupić się bardziej na... życiu i zarabianiu na życie 😅), więc proszę o cierpliwość — odpowiedzi mogą chwilę potrwać. 
+
+Jeśli chcesz wesprzeć projekt:
+
+- ☕ [Postaw mi kawę](https://buymeacoffee.com/controli)
+- 💬 Podziękuj w wątku Dyskusji [Discussions thread](https://github.com/Controli-pl/lms-ytmusic/discussions/1)
+- ⭐ Albo po prostu zostaw gwiazdkę — to nic nie kosztuje, a świetnie motywuje!
