@@ -235,5 +235,5 @@ Nie jestem zawodowym programistą — to projekt hobbystyczny, który stworzyłe
 Jeśli chcesz wesprzeć projekt:
 
 - ☕ [Postaw mi kawę](https://buymeacoffee.com/controli)
-- 💬 Podziękuj w wątku Dyskusji [Discussions thread](https://github.com/Controli-pl/lms-ytmusic/discussions/1)
+- 💬 Podziękuj w [wątku Dyskusji](https://github.com/Controli-pl/lms-ytmusic/discussions/1)
 - ⭐ Albo po prostu zostaw gwiazdkę — to nic nie kosztuje, a świetnie motywuje!
