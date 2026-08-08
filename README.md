@@ -10,7 +10,12 @@ After authorization you gain:
 - browsing recommendations
 - the ability to "Like" tracks.
 
-![1](https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/main/PL/INFO/1.jpg) ![2](https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/main/PL/INFO/2.jpg) ![3](https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/main/PL/INFO/3.jpg)
+## Screenshots
+
+| | | |
+|---|---|---|
+| <img src="PL/INFO/1.jpg" width="250"> | <img src="PL/INFO/2.jpg" width="250"> | <img src="PL/INFO/3.jpg" width="250"> |
+| <img src="PL/INFO/4.jpg" width="250"> | <img src="PL/INFO/5.jpg" width="250"> | <img src="PL/INFO/6.jpg" width="250"> |
 
 ## Disclaimer
 
