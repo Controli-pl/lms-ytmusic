@@ -10,6 +10,8 @@ After authorization you gain:
 - browsing recommendations
 - the ability to "Like" tracks.
 
+![1](https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/main/PL/INFO/1.jpg) ![2](https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/main/PL/INFO/2.jpg) ![3](https://raw.githubusercontent.com/Controli-pl/lms-ytmusic/main/PL/INFO/3.jpg)
+
 ## Disclaimer
 
 This plugin is a private, independent project. It relies on Python libraries and may stop working at any time if Google changes its API.
