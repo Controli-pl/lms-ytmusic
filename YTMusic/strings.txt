@@ -113,3 +113,107 @@ PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE_HALF
 PLUGIN_YTMUSIC_GAIN_DEEP_ANALYSIS_MODE_FULL
 	EN	Whole track (most accurate, recommended)
 	PL	Cały utwór (najdokładniejsze, zalecane)
+
+PLUGIN_YTMUSIC_LIKE_TRACK
+	EN	Like this track
+	PL	Polub ten utwór
+
+PLUGIN_YTMUSIC_QUICK_SAVE
+	EN	Quick save (playlist "Saved from LMS")
+	PL	Szybki zapis (playlista "Zapisane z LMS")
+
+PLUGIN_YTMUSIC_ADD_TO_PLAYLIST
+	EN	Add to playlist...
+	PL	Dodaj do playlisty...
+
+PLUGIN_YTMUSIC_SEARCH_ARTIST
+	EN	Search for artist '%s' in YTMusic
+	PL	Szukaj artystów '%s' w YTMusic
+
+PLUGIN_YTMUSIC_SEARCH_TRACK
+	EN	Search for track '%s' in YTMusic
+	PL	Szukaj utworów '%s' w YTMusic
+
+PLUGIN_YTMUSIC_SEARCH_QUERY
+	EN	Search "%s" in YTMusic
+	PL	Szukaj "%s" w YTMusic
+
+PLUGIN_YTMUSIC_LIKED
+	EN	Liked!
+	PL	Polubiono!
+
+PLUGIN_YTMUSIC_SAVED
+	EN	Saved!
+	PL	Zapisano!
+
+PLUGIN_YTMUSIC_ADDED_TO_PLAYLIST
+	EN	Added to playlist!
+	PL	Dodano do playlisty!
+
+PLUGIN_YTMUSIC_ERR_AUTH_CHECK
+	EN	Error - check if auth is configured
+	PL	Błąd - sprawdź czy jest skonfigurowany auth
+
+PLUGIN_YTMUSIC_ERR_BRIDGE_CONNECTION
+	EN	Error connecting to bridge
+	PL	Błąd połączenia z bridge
+
+PLUGIN_YTMUSIC_ERR_FETCH_PLAYLISTS
+	EN	Error fetching playlists (auth?)
+	PL	Błąd pobierania playlist (auth?)
+
+PLUGIN_YTMUSIC_NO_PLAYLISTS
+	EN	No playlists in library
+	PL	Brak playlist w bibliotece
+
+PLUGIN_YTMUSIC_ERR_ADD_TO_PLAYLIST
+	EN	Error adding to playlist
+	PL	Błąd dodawania do playlisty
+
+PLUGIN_YTMUSIC_ERR_FETCH_RECOMMENDATIONS
+	EN	Error fetching recommendations
+	PL	Błąd pobierania rekomendacji
+
+PLUGIN_YTMUSIC_NO_RECOMMENDATIONS
+	EN	No recommendations right now
+	PL	Brak rekomendacji w tej chwili
+
+PLUGIN_YTMUSIC_SECTION_UNAVAILABLE
+	EN	Section no longer available (refresh Recommended)
+	PL	Sekcja już niedostępna (odśwież Polecane)
+
+PLUGIN_YTMUSIC_NO_SECTION_ITEMS
+	EN	No items in this section
+	PL	Brak pozycji w tej sekcji
+
+PLUGIN_YTMUSIC_ERR_FETCH_LIBRARY
+	EN	Error fetching library (auth?)
+	PL	Błąd pobierania biblioteki (auth?)
+
+PLUGIN_YTMUSIC_PLAY_FIRST_FOR_RADIO
+	EN	Play a YTMusic track first to build a radio
+	PL	Najpierw odtwórz jakiś utwór YTMusic, żeby zbudować radio
+
+PLUGIN_YTMUSIC_START_RADIO_FROM_TRACK
+	EN	Start YTMusic radio from this track
+	PL	Rozpocznij radio YTMusic od tego utworu
+
+PLUGIN_YTMUSIC_ERR_FETCH_RADIO
+	EN	Error fetching radio
+	PL	Błąd pobierania radia
+
+PLUGIN_YTMUSIC_NO_RADIO_RESULTS
+	EN	No radio results
+	PL	Brak wyników radia
+
+PLUGIN_YTMUSIC_ADDED_N_TRACKS
+	EN	Added %d tracks to the queue
+	PL	Dodano %d utworów do kolejki
+
+PLUGIN_YTMUSIC_SECTION_FALLBACK
+	EN	Section
+	PL	Sekcja
+
+PLUGIN_YTMUSIC_PLAYLIST_FALLBACK
+	EN	Playlist
+	PL	Playlista

@@ -6,8 +6,8 @@
     <id>SlimServer</id>
   </targetApplication>
   <optionsURL>plugins/YTMusic/settings/basic.html</optionsURL>
-  <creator>Paweł</creator>
-  <version>0.1.0</version>
+  <creator>Controli</creator>
+  <version>0.1.3</version>
   <name>PLUGIN_YTMUSIC</name>
   <description>YouTube Music bridge</description>
   <defaultState>enabled</defaultState>

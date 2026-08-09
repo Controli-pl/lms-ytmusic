@@ -38,7 +38,7 @@ my $BRIDGE_PORT = Plugins::YTMusic::ProtocolHandler::bridgePort();
 my $BRIDGE = Plugins::YTMusic::ProtocolHandler::bridgeUrl();
 
 # ---------------------------------------------------------------------
-# Zarzadzanie procesem bridge'a (Bin/<platforma>/ytmusic_bridge - PyInstaller
+# Zarzadzanie procesem bridge'a (Bin/<arch>/ytmusic_bridge - PyInstaller
 # onefile). Wczesniej bridge byl odpalany na zewnatrz pluginu (nohup w
 # konfiguracji kontenera) - tutaj przenosimy to do initPlugin/shutdownPlugin,
 # zeby plugin dzialal samodzielnie po zainstalowaniu z repozytorium, bez
@@ -53,7 +53,7 @@ sub _startBridge {
     my $bin = Slim::Utils::Misc::findbin('ytmusic_bridge');
     unless ($bin) {
         $log->error("Nie znaleziono binarki ytmusic_bridge dla tej platformy "
-            . "(sprawdz czy Bin/<platforma>/ytmusic_bridge istnieje dla Twojej architektury)");
+            . "(sprawdz czy Bin/<arch>/ytmusic_bridge istnieje dla Twojej architektury)");
         return;
     }
 
@@ -151,7 +151,7 @@ sub shutdownPlugin {
 # nadpisuje ta odpowiedz ktora wroci NAJPOZNIEJ, a nie ta odpowiadajaca
 # najpozniejszemu kliknieciu, co dawalo objaw "dodaje X, a w kolejce
 # ląduje zupelnie inny utwor Y".
-
+#
 # Kazde nowe wywolanie takiej komendy dla danego klienta podbija licznik;
 # gdy odpowiedz HTTP wraca, sprawdzamy czy licznik klienta nadal wskazuje
 # na NASZ token - jesli w miedzyczasie odpalono kolejne, nowsze wywolanie,
@@ -237,7 +237,6 @@ sub _currentEntryUrlFor {
     return $url eq "ytmusic://$videoId";
 }
 
-
 sub _deepAnalysisFire {
     my ($client, $videoId, $requiredSeconds) = @_;
     return unless $client;
@@ -312,7 +311,7 @@ sub _deepAnalysisFire {
             }
         },
         sub { $log->debug("YTMusic: deep gain analysis failed dla $videoId (nieszkodliwe)"); },
-	{ Timeout => 100 },
+        { Timeout => 100 },
     )->get("$BRIDGE/gain?video_id=$videoId&mode=$mode");
 }
 
@@ -324,11 +323,9 @@ sub _deepAnalysisFireTimer {
     _deepAnalysisFire($client, $videoId, $requiredSeconds);
 }
 
-
 my %_lastPrefetchTime; # client id -> epoch ostatniego prefetcha
 
 use constant PREFETCH_THROTTLE_SECONDS => 3;
-
 
 # ---------------------------------------------------------------------
 # Wywolywane przy mutacjach kolejki. WAZNE: subskrybujemy sie TYLKO na
@@ -435,7 +432,6 @@ sub _planDeepAnalysis {
 
     Slim::Utils::Timers::setTimer($client, Time::HiRes::time() + $requiredSeconds, \&_deepAnalysisFireTimer, $videoId, $requiredSeconds);
 }
-
 
 # Ile trzymac odpowiedz bridge'a w cache'u pluginu, liczone jako sliding
 # window - kazdy odczyt z cache'a odswieza jego "wiek" (patrz
@@ -585,7 +581,7 @@ sub initPlugin {
         # $GAIN_PREFETCH_AHEAD utworow ytmusic:// w kolejce, licząc od
         # AKTUALNEJ pozycji, i planujemy jednorazowy timer glebokiej
         # analizy dla aktualnie granego utworu (patrz _onNewSong).
-	Slim::Control::Request::subscribe(\&_onPlaylistChange, [['playlist'], ['newsong', 'addtracks', 'insert', 'load_tracks', 'add', 'loadtracks']]);
+        Slim::Control::Request::subscribe(\&_onPlaylistChange, [['playlist'], ['newsong', 'addtracks', 'insert', 'load_tracks', 'add', 'loadtracks']]);
 
         $log->warn("YTMusic: initPlugin OK (protocol handler + global search + track info + CLI registered)");
     };
@@ -649,7 +645,7 @@ sub handleHome {
 
         if (!$data || !$data->{sections}) {
             $log->debug("Home: brak danych");
-            return $cb->({ items => [{ name => 'Blad pobierania rekomendacji', type => 'text' }] });
+            return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_FETCH_RECOMMENDATIONS') || 'Blad pobierania rekomendacji', type => 'text' }] });
         }
 
         my @items;
@@ -661,7 +657,7 @@ sub handleHome {
             next unless @$contents;
 
             my $item = {
-                name => $title || 'Sekcja',
+                name => $title || string('PLUGIN_YTMUSIC_SECTION_FALLBACK') || 'Sekcja',
                 type => 'link',
                 url => \&handleHomeSection,
                 passthrough => [{ sectionTitle => $title }],
@@ -690,7 +686,7 @@ sub handleHome {
         }
 
         unless (@items) {
-            return $cb->({ items => [{ name => 'Brak rekomendacji w tej chwili', type => 'text' }] });
+            return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_NO_RECOMMENDATIONS') || 'Brak rekomendacji w tej chwili', type => 'text' }] });
         }
 
         $cb->({ items => \@items });
@@ -716,7 +712,7 @@ sub handleHomeSection {
 
         my ($section) = grep { ($_->{title} || '') eq $sectionTitle } @{ $data->{sections} };
         unless ($section) {
-            return $cb->({ items => [{ name => 'Sekcja juz niedostepna (odswiez Polecane)', type => 'text' }] });
+            return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_SECTION_UNAVAILABLE') || 'Sekcja juz niedostepna (odswiez Polecane)', type => 'text' }] });
         }
 
         my @items;
@@ -735,7 +731,7 @@ sub handleHomeSection {
             elsif ($c->{playlistId}) {
                 next if $seen{"p:" . $c->{playlistId}}++;
                 push @items, {
-                    name => $c->{title} || 'Playlist',
+                    name => $c->{title} || string('PLUGIN_YTMUSIC_PLAYLIST_FALLBACK') || 'Playlist',
                     type => 'link',
                     url => \&handlePlaylistTracks,
                     passthrough => [{ playlistId => $c->{playlistId} }],
@@ -756,7 +752,7 @@ sub handleHomeSection {
         }
 
         unless (@items) {
-            return $cb->({ items => [{ name => 'Brak pozycji w tej sekcji', type => 'text' }] });
+            return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_NO_SECTION_ITEMS') || 'Brak pozycji w tej sekcji', type => 'text' }] });
         }
 
         $cb->({ items => \@items });
@@ -778,13 +774,13 @@ sub handlePlaylists {
 
             if ($@ || !$data || !$data->{playlists}) {
                 $log->warn("Playlists parse failed: $@");
-                return $cb->({ items => [{ name => 'Blad pobierania playlist (auth?)', type => 'text' }] });
+                return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_FETCH_PLAYLISTS') || 'Blad pobierania playlist (auth?)', type => 'text' }] });
             }
 
             my @items = map {
                 my $pl = $_;
                 {
-                    name => $pl->{title} || 'Playlist',
+                    name => $pl->{title} || string('PLUGIN_YTMUSIC_PLAYLIST_FALLBACK') || 'Playlist',
                     type => 'link',
                     url => \&handlePlaylistTracks,
                     passthrough => [{ playlistId => $pl->{playlistId} }],
@@ -806,7 +802,7 @@ sub handlePlaylists {
         },
         sub {
             $log->warn("Playlists HTTP request failed");
-            $cb->({ items => [{ name => 'Blad polaczenia z bridge', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_BRIDGE_CONNECTION') || 'Blad polaczenia z bridge', type => 'text' }] });
         },
     )->get($url);
 }
@@ -847,7 +843,7 @@ sub handleLibrarySongs {
 
             if ($@ || !$data || !$data->{tracks}) {
                 $log->warn("Library songs parse failed: $@");
-                return $cb->({ items => [{ name => 'Blad pobierania biblioteki (auth?)', type => 'text' }] });
+                return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_FETCH_LIBRARY') || 'Blad pobierania biblioteki (auth?)', type => 'text' }] });
             }
 
             my @items = map { _trackToSearchItem($_) }
@@ -857,7 +853,7 @@ sub handleLibrarySongs {
         },
         sub {
             $log->warn("Library songs HTTP request failed");
-            $cb->({ items => [{ name => 'Blad polaczenia z bridge', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_BRIDGE_CONNECTION') || 'Blad polaczenia z bridge', type => 'text' }] });
         },
     )->get($url);
 }
@@ -901,7 +897,7 @@ sub searchInfoMenu {
     return {
         name => 'YTMusic',
         items => [{
-            name => "Szukaj \"$query\" w YouTube Music",
+            name => sprintf(string('PLUGIN_YTMUSIC_SEARCH_QUERY') || "Szukaj \"%s\" w YouTube Music", $query),
             type => 'link',
             url => \&handleSearch,
             passthrough => [{ search => $query }],
@@ -924,7 +920,7 @@ sub handleRadioSeed {
     if (!$videoId) {
         return $cb->({
             items => [{
-                name => 'Najpierw odtworz jakis utwor YTMusic, zeby zbudowac radio',
+                name => string('PLUGIN_YTMUSIC_PLAY_FIRST_FOR_RADIO') || 'Najpierw odtworz jakis utwor YTMusic, zeby zbudowac radio',
                 type => 'text',
             }],
         });
@@ -971,7 +967,7 @@ sub trackInfoRadioMenu {
     my $videoId = $1;
 
     return {
-        name => 'Rozpocznij radio YTMusic od tego utworu',
+        name => string('PLUGIN_YTMUSIC_START_RADIO_FROM_TRACK') || 'Rozpocznij radio YTMusic od tego utworu',
         type => 'link',
         url => \&handleRadioAddToPlaylist,
         passthrough => [{ videoId => $videoId }],
@@ -1025,7 +1021,7 @@ sub handleRadioAddToPlaylist {
 
             if ($@ || !$data || !$data->{tracks}) {
                 $log->warn("Radio (add) parse failed: $@");
-                return $cb->({ items => [{ name => 'Blad pobierania radia', type => 'text' }] });
+                return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_FETCH_RADIO') || 'Blad pobierania radia', type => 'text' }] });
             }
 
             my @tracks = grep { $_->{videoId} } @{ $data->{tracks} };
@@ -1037,7 +1033,7 @@ sub handleRadioAddToPlaylist {
             }
 
             unless (@tracks || $includeSeed) {
-                return $cb->({ items => [{ name => 'Brak wynikow radia', type => 'text' }] });
+                return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_NO_RADIO_RESULTS') || 'Brak wynikow radia', type => 'text' }] });
             }
 
             my @urls;
@@ -1076,14 +1072,14 @@ sub handleRadioAddToPlaylist {
 
             $cb->({
                 items => [{
-                    name => "Dodano " . scalar(@urls) . " utworow do kolejki",
+                    name => sprintf(string('PLUGIN_YTMUSIC_ADDED_N_TRACKS') || "Dodano %d utworow do kolejki", scalar(@urls)),
                     type => 'text',
                 }],
             });
         },
         sub {
             $log->warn("Radio (add) HTTP request failed");
-            $cb->({ items => [{ name => 'Blad polaczenia z bridge', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_BRIDGE_CONNECTION') || 'Blad polaczenia z bridge', type => 'text' }] });
         },
     )->get($url);
 }
@@ -1203,6 +1199,7 @@ sub cliReplayGainVolume {
 
 # ---------------------------------------------------------------------
 # CLI: wyszukiwanie (query) - do wolania z zewnatrz, np. Home Assistant.
+# Zwraca item_loop z title/artist/url/image, count = liczba wynikow.
 # ---------------------------------------------------------------------
 sub cliSearch {
     my $request = shift;
@@ -1435,7 +1432,11 @@ sub cliPlayRadio {
 }
 
 # ---------------------------------------------------------------------
-# Menu kontekstowe DOWOLNEGO utworu - link "Szukaj w YTMusic"
+# Menu kontekstowe DOWOLNEGO utworu (biblioteka lokalna, Deezer, itd.) -
+# link "Szukaj w YTMusic", analogicznie do "On Deezer"/"On YouTube" u innych.
+# Celowo NIE pokazujemy tego dla wlasnych utworow ytmusic:// (tam juz sa
+# akcje z trackInfoActionsMenu/trackInfoRadioMenu, w tym wlasne linki
+# "Szukaj artystow/utworow" oparte na cache metadanych - patrz nizej).
 # ---------------------------------------------------------------------
 sub trackInfoCrossSearchMenu {
     my ($client, $url, $track, $remoteMeta) = @_;
@@ -1460,7 +1461,7 @@ sub trackInfoCrossSearchMenu {
     my $query = $artist ? "$title $artist" : $title;
 
     return {
-        name => "Szukaj \"$query\" w YTMusic",
+        name => sprintf(string('PLUGIN_YTMUSIC_SEARCH_QUERY') || "Szukaj \"%s\" w YTMusic", $query),
         type => 'link',
         url => \&handleSearch,
         passthrough => [{ search => $query }],
@@ -1468,7 +1469,43 @@ sub trackInfoCrossSearchMenu {
 }
 
 # ---------------------------------------------------------------------
-# Menu kontekstowe utworu: Polub / Szybki zapis / Dodaj do playlisty
+# Czyszczenie tytulu utworu do celow WYSZUKIWANIA (link "Szukaj utworow
+# '...'" w trackInfoActionsMenu). Usuwa typowe dopiski YouTube w
+# nawiasach/klamrach, ktore psuja wyniki wyszukiwania (np. tytul
+# "Wojenka (official single)" w YTMusic zwraca gorsze/zerowe wyniki niz
+# samo "Wojenka"). NIE dotyka to samego wyswietlanego tytulu utworu
+# nigdzie indziej (np. "Teraz odtwarzane") - tylko lokalna kopia uzyta
+# do budowania zapytania.
+# ---------------------------------------------------------------------
+sub _cleanSearchTitle {
+    my ($title) = @_;
+    return '' unless defined $title;
+
+    my $clean = $title;
+    $clean =~ s/\s*[\(\[][^\)\]]*\b(official|lyric|lyrics|audio|video|visualizer|remaster|remastered|hd|hq|4k|live)\b[^\)\]]*[\)\]]\s*/ /gi;
+    $clean =~ s/^\s+|\s+$//g;
+    $clean =~ s/\s{2,}/ /g;
+
+    return $clean ne '' ? $clean : $title;
+}
+
+# ---------------------------------------------------------------------
+# Menu kontekstowe utworu: Polub / Szybki zapis / Dodaj do playlisty... /
+# Szukaj artystow.../Szukaj utworow... (analogicznie do "On Deezer" z
+# pluginu Deezer, ale rozdzielone na dwa osobne linki - artysta i tytul -
+# zamiast jednego zbiorczego zapytania).
+#
+# Tytul/artysta biezacego utworu bierzemy z WLASNEGO cache metadanych
+# (ProtocolHandler::getCachedMeta), a nie z $remoteMeta - remoteMeta w
+# LMS bywa czasem sformatowany inaczej niz surowe pola z bridge'a (np.
+# zlaczony string "Tytul - Artysta"), a nasz cache zawiera dokladnie te
+# same, rozdzielone pola co przy budowaniu radia/playlisty. remoteMeta
+# jest tu tylko fallbackiem, gdyby z jakiegos powodu cache byl pusty.
+#
+# Tytul do samego LINKU wyszukiwania jest dodatkowo czyszczony przez
+# _cleanSearchTitle z typowych dopiskow YouTube (official video itp.) -
+# patrz komentarz przy tej funkcji. Nazwa utworu widoczna gdzie indziej
+# (np. Teraz odtwarzane) NIE jest tym dotknieta.
 # ---------------------------------------------------------------------
 sub trackInfoActionsMenu {
     my ($client, $url, $track, $remoteMeta) = @_;
@@ -1476,29 +1513,57 @@ sub trackInfoActionsMenu {
     return undef unless $url && $url =~ m{^ytmusic://(.+)$};
     my $videoId = $1;
 
+    my $meta = Plugins::YTMusic::ProtocolHandler->getCachedMeta($videoId) || {};
+    my $title = $meta->{title} || $remoteMeta->{title} || '';
+    my $artist = $meta->{artist} || $remoteMeta->{artist} || '';
+
+    # Fallback: remoteMeta->{artist} bywa sformatowany jako "Tytul - Artysta"
+    # (np. gdy meta pochodzi z UI zamiast z wlasnego cache) - rozdzielamy.
+    if ($artist && $title && $artist =~ /^\Q$title\E\s*-\s*(.+)$/) {
+        $artist = $1;
+    }
+
+    my $searchTitle = _cleanSearchTitle($title);
+
+    my @items = (
+        {
+            name => string('PLUGIN_YTMUSIC_LIKE_TRACK') || 'Polub ten utwor',
+            type => 'link',
+            url => \&handleLike,
+            passthrough => [{ videoId => $videoId }],
+        },
+        {
+            name => string('PLUGIN_YTMUSIC_QUICK_SAVE') || 'Szybki zapis (playlista "Zapisane z LMS")',
+            type => 'link',
+            url => \&handleQuickSave,
+            passthrough => [{ videoId => $videoId }],
+        },
+        {
+            name => string('PLUGIN_YTMUSIC_ADD_TO_PLAYLIST') || 'Dodaj do playlisty...',
+            type => 'link',
+            url => \&handleAddToPlaylistMenu,
+            passthrough => [{ videoId => $videoId }],
+        },
+    );
+
+    push @items, {
+        name => sprintf(string('PLUGIN_YTMUSIC_SEARCH_ARTIST') || "Szukaj artystow '%s' w YTMusic", $artist),
+        type => 'link',
+        url => \&handleSearch,
+        passthrough => [{ search => $artist }],
+    } if $artist;
+
+    push @items, {
+        name => sprintf(string('PLUGIN_YTMUSIC_SEARCH_TRACK') || "Szukaj utworow '%s' w YTMusic", $searchTitle),
+        type => 'link',
+        url => \&handleSearch,
+        passthrough => [{ search => $searchTitle }],
+    } if $searchTitle;
+
     return {
         name => 'YTMusic',
         type => 'outline',
-        items => [
-            {
-                name => 'Polub ten utwor',
-                type => 'link',
-                url => \&handleLike,
-                passthrough => [{ videoId => $videoId }],
-            },
-            {
-                name => 'Szybki zapis (playlista "Zapisane z LMS")',
-                type => 'link',
-                url => \&handleQuickSave,
-                passthrough => [{ videoId => $videoId }],
-            },
-            {
-                name => 'Dodaj do playlisty...',
-                type => 'link',
-                url => \&handleAddToPlaylistMenu,
-                passthrough => [{ videoId => $videoId }],
-            },
-        ],
+        items => \@items,
     };
 }
 
@@ -1510,11 +1575,11 @@ sub handleLike {
 
     Slim::Networking::SimpleAsyncHTTP->new(
         sub {
-            $cb->({ items => [{ name => 'Polubiono!', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_LIKED') || 'Polubiono!', type => 'text' }] });
         },
         sub {
             $log->warn("handleLike: HTTP request failed dla $videoId");
-            $cb->({ items => [{ name => 'Blad - sprawdz czy jest skonfigurowany auth', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_AUTH_CHECK') || 'Blad - sprawdz czy jest skonfigurowany auth', type => 'text' }] });
         },
     )->get($url);
 }
@@ -1527,11 +1592,11 @@ sub handleQuickSave {
 
     Slim::Networking::SimpleAsyncHTTP->new(
         sub {
-            $cb->({ items => [{ name => 'Zapisano!', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_SAVED') || 'Zapisano!', type => 'text' }] });
         },
         sub {
             $log->warn("handleQuickSave: HTTP request failed dla $videoId");
-            $cb->({ items => [{ name => 'Blad - sprawdz czy jest skonfigurowany auth', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_AUTH_CHECK') || 'Blad - sprawdz czy jest skonfigurowany auth', type => 'text' }] });
         },
     )->get($url);
 }
@@ -1549,13 +1614,13 @@ sub handleAddToPlaylistMenu {
 
             if ($@ || !$data || !$data->{playlists}) {
                 $log->warn("handleAddToPlaylistMenu: parse failed: $@");
-                return $cb->({ items => [{ name => 'Blad pobierania playlist (auth?)', type => 'text' }] });
+                return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_FETCH_PLAYLISTS') || 'Blad pobierania playlist (auth?)', type => 'text' }] });
             }
 
             my @items = map {
                 my $pl = $_;
                 {
-                    name => $pl->{title} || 'Playlist',
+                    name => $pl->{title} || string('PLUGIN_YTMUSIC_PLAYLIST_FALLBACK') || 'Playlist',
                     type => 'link',
                     url => \&handleAddToPlaylistConfirm,
                     passthrough => [{ videoId => $videoId, playlistId => $pl->{playlistId} }],
@@ -1563,14 +1628,14 @@ sub handleAddToPlaylistMenu {
             } grep { $_->{playlistId} } @{ $data->{playlists} };
 
             unless (@items) {
-                return $cb->({ items => [{ name => 'Brak playlist w bibliotece', type => 'text' }] });
+                return $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_NO_PLAYLISTS') || 'Brak playlist w bibliotece', type => 'text' }] });
             }
 
             $cb->({ items => \@items });
         },
         sub {
             $log->warn("handleAddToPlaylistMenu: HTTP request failed");
-            $cb->({ items => [{ name => 'Blad polaczenia z bridge', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_BRIDGE_CONNECTION') || 'Blad polaczenia z bridge', type => 'text' }] });
         },
     )->get($url);
 }
@@ -1584,11 +1649,11 @@ sub handleAddToPlaylistConfirm {
 
     Slim::Networking::SimpleAsyncHTTP->new(
         sub {
-            $cb->({ items => [{ name => 'Dodano do playlisty!', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ADDED_TO_PLAYLIST') || 'Dodano do playlisty!', type => 'text' }] });
         },
         sub {
             $log->warn("handleAddToPlaylistConfirm: HTTP request failed dla $videoId -> $playlistId");
-            $cb->({ items => [{ name => 'Blad dodawania do playlisty', type => 'text' }] });
+            $cb->({ items => [{ name => string('PLUGIN_YTMUSIC_ERR_ADD_TO_PLAYLIST') || 'Blad dodawania do playlisty', type => 'text' }] });
         },
     )->get($url);
 }

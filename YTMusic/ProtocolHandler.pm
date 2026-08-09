@@ -51,19 +51,6 @@ sub qualityRank {
     return QUALITY_RANK->{ $quality // '' } // 0;
 }
 
-# Wylacznik funkcji replay gain - ustaw na 0 zeby wylaczyc bez zmiany kodu
-# i bez restartu serwera (preferencja czytana na zywo przy kazdym onStream).
-# Domyslnie wlaczone. NADRZEDNY wobec WSZYSTKICH mechanizmow nizej -
-# gdy wylaczony, ani prefetch, ani onStream, ani gleboka analiza nigdy
-# nie wywoluja bridge'a.
-
-# replaygain_min_volume: dodatkowy auto-wylacznik wg glosnosci. 0 = wylaczony
-# (gain liczony zawsze, jak dawniej). >0 = gain liczony TYLKO gdy przynajmniej
-# jeden podlaczony gracz ma glosnosc powyzej tej wartosci - przy cichym
-# sluchaniu w tle precyzyjny replay gain i tak nie ma duzego znaczenia
-# sluchowo. Dotyczy TYLKO blokujacego fallbacku w onStream - gleboka
-# analiza (nizej) go ignoruje.
-
 # ---------------------------------------------------------------------
 # GLEBOKA ANALIZA GAINU - dwie NIEZALEZNE osie konfiguracji (patrz
 # Plugin.pm::_onNewSong/_deepAnalysisFire i docstring w ytmusic_bridge.py):
@@ -74,11 +61,11 @@ sub qualityRank {
 #
 # - gain_deep_analysis_mode: JAK GLEBOKO analizowac, gdy powyzszy prog
 #   zostanie przekroczony:
-#     'quick' - NIE poglebiaj analizy (efektywnie wylacza mechanizm -
-#               utwor zostaje z gainem policzonym z pierwszych 25s,
-#               tak jak przy prefetchu/onStream fallback)
-#     'half'  - analiza pierwszej polowy utworu
-#     'full'  - analiza calego utworu (najdokladniejsze)
+#   'quick' - NIE poglebiaj analizy (efektywnie wylacza mechanizm -
+#             utwor zostaje z gainem policzonym z pierwszych 25s,
+#             tak jak przy prefetchu/onStream fallback)
+#   'half'  - analiza pierwszej polowy utworu
+#   'full'  - analiza calego utworu (najdokladniejsze)
 #   Domyslnie 'full'.
 #
 # Prefetch "N do przodu" (Plugin.pm::_prefetchGain) i blokujacy fallback
@@ -90,10 +77,10 @@ sub qualityRank {
 # ---------------------------------------------------------------------
 my $prefs = preferences('plugin.ytmusic');
 $prefs->init({
-    replaygain_enabled => 1,
+    replaygain_enabled => 0,
     replaygain_min_volume => 0,
-    gain_deep_analysis_percent => 85,
-    gain_deep_analysis_mode => 'full',
+    gain_deep_analysis_percent => 70,
+    gain_deep_analysis_mode => 'half',
 });
 
 our %metaCache;
@@ -217,6 +204,7 @@ sub setReplayGainRuntimeOverride {
         $runtimeGainOverride = $value ? 1 : 0;
         $log->warn("YTMusic: tymczasowy override gainu = $runtimeGainOverride (obowiazuje do restartu LMS)");
     }
+
     return $runtimeGainOverride;
 }
 
@@ -248,6 +236,7 @@ sub setReplayGainMinVolumeOverride {
         $runtimeMinVolumeOverride = min($value + 0, 100);
         $log->warn("YTMusic: tymczasowy override progu glosnosci = $runtimeMinVolumeOverride (obowiazuje do restartu LMS)");
     }
+
     return $runtimeMinVolumeOverride;
 }
 
@@ -277,11 +266,6 @@ sub getCachedMeta {
     return $metaCache{$videoId};
 }
 
-# Publiczny, wspolny warunek "czy w ogole warto teraz liczyc/prefetchowac
-# gain" - uzywany zarowno tutaj (onStream), jak i przez Plugin.pm (prefetch
-# przy zmianie utworu / playradio / playplaylist), zeby wszystkie miejsca
-# respektowaly TE SAMA logike, bez duplikowania jej w dwoch plikach.
-
 # Publiczny warunek "czy glowny wylacznik gainu jest wlaczony" (override z CLI
 # lub, w jego braku, preferencja z Settings) - BEZ progu glosnosci. To jest
 # twardy wylacznik: gdy wylaczony, gain jest pomijany calkowicie, nawet jesli
@@ -296,7 +280,7 @@ sub replayGainMasterEnabled {
 # NOWA wartosc gainu teraz" (ciezka operacja: pelna ekstrakcja yt-dlp + do
 # 20s loudnorm w ffmpeg) - nie dotyczy zastosowania juz znanej wartosci,
 # co jest tanie i powinno dzialac niezaleznie od progu (patrz onStream).
-
+#
 # $client jest opcjonalny - jesli podany, sprawdzany jest w pierwszej
 # kolejnosci (np. przy realnym onStream wiadomo ktory gracz faktycznie
 # gra), ale "dowolny inny gracz gra glosno" tez wystarcza (patrz komentarz
@@ -317,6 +301,7 @@ sub replayGainVolumeOk {
             return 1;
         }
     }
+
     $log->debug("YTMusic: replayGainVolumeOk - zaden gracz nie przekracza progu $minVolume, liczenie gainu pominiete");
     return 0;
 }
@@ -450,6 +435,7 @@ sub _fetchGain {
     if ($@ || !defined $gain_data->{replaygain_track_gain}) {
         return undef;
     }
+
     return {
         gain => $gain_data->{replaygain_track_gain} + 0,
         quality => $gain_data->{quality} || $mode,
@@ -476,6 +462,7 @@ sub _fetchGainCacheOnly {
     if ($@ || !defined $gain_data->{replaygain_track_gain}) {
         return undef;
     }
+
     return {
         gain => $gain_data->{replaygain_track_gain} + 0,
         quality => $gain_data->{quality} || 'quick',
@@ -504,7 +491,7 @@ sub new {
     # rozwazyc realny seek (przy duration=0 po prostu restartuje od zera zamiast
     # wywolac getSeekData/reopen z timeOffset). Samo zwracanie 'duration' z
     # getMetadataFor NIE wystarcza - trzeba ustawic to tutaj jawnie.
-
+    #
     # WAZNE: uzywamy TYLKO _fetchLightMeta (bez gainu) - new() jest wolane
     # przez LMS dla KAZDEGO utworu w kolejce przy prebufferingu, wiec musi
     # byc szybkie. Gain jest doliczany pozniej, wylacznie w onStream().
@@ -532,21 +519,21 @@ sub new {
             $log->warn("YTMusic: brak znanej dlugosci dla $videoId (timeout/blad bridge'a?) - "
                 . "ustawiam bezpieczny placeholder 600s zamiast zostawiac LMS zgadywanie");
         }
+    }
 
-        # Jesli to reopen po zadaniu przewiniecia, LMS zapisuje docelowa
-        # pozycje (w sekundach) w $song->seekdata->{timeOffset} - doklejamy
-        # ja jako ?start=X, a bridge/ffmpeg zaczyna remux od tej sekundy.
-        my $seekdata = $song ? $song->seekdata() : undef;
-        if ($seekdata && defined $seekdata->{timeOffset}) {
-            my $start = $seekdata->{timeOffset};
-            $realUrl .= "?start=$start";
-            $log->debug("YTMusic: seek do ${start}s, url=$realUrl");
+    # Jesli to reopen po zadaniu przewiniecia, LMS zapisuje docelowa
+    # pozycje (w sekundach) w $song->seekdata->{timeOffset} - doklejamy
+    # ja jako ?start=X, a bridge/ffmpeg zaczyna remux od tej sekundy.
+    my $seekdata = $song ? $song->seekdata() : undef;
+    if ($seekdata && defined $seekdata->{timeOffset}) {
+        my $start = $seekdata->{timeOffset};
+        $realUrl .= "?start=$start";
+        $log->debug("YTMusic: seek do ${start}s, url=$realUrl");
 
-            # To mowi LMS "ten nowy strumien zaczyna sie od sekundy $start
-            # oryginalnego utworu" - bez tego pozycja w UI liczona jest od 0,
-            # mimo ze audio faktycznie gra od poprawnego miejsca.
-            eval { $song->startOffset($start); };
-        }
+        # To mowi LMS "ten nowy strumien zaczyna sie od sekundy $start
+        # oryginalnego utworu" - bez tego pozycja w UI liczona jest od 0,
+        # mimo ze audio faktycznie gra od poprawnego miejsca.
+        eval { $song->startOffset($start); };
     }
 
     $log->debug("YTMusic: podmieniam na $realUrl");
@@ -667,6 +654,7 @@ sub onStream {
             $log->debug("YTMusic: onStream - brak gainu w cache i za cicho zeby liczyc dla $videoId, pomijam");
             return;
         }
+
         my $fetched = _fetchGain($videoId, 'quick');
         if ($fetched) {
             $gain = $fetched->{gain};
