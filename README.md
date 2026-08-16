@@ -47,7 +47,9 @@ The Bridge is started and managed automatically by the plugin.
 
 
 ### ReplayGain
+
 ~~
+
 Tracks served by YouTube often have very different loudness levels, which used to noticeably spoil the experience when listening to a longer playlist without constant supervision. That's why the plugin calculates and applies ReplayGain automatically, without needing to pre-analyze your entire library:
 
 - **Quick measurement** (first ~25s of a track) — applied immediately on first playback and when prefetching tracks in the queue, so it doesn't block playback from starting.
@@ -63,7 +65,10 @@ Settings (Settings → Advanced → YTMusic in the LMS interface):
 | Minimum volume for gain calculation | New gain is calculated only when at least one connected player has volume above this value (0 = always calculated, regardless of volume) |
 | Listening threshold for deep analysis | After what % of a track's actual listening time a more precise analysis is requested |
 | Deep analysis scope | 25 seconds (no deepening — disables the mechanism), half the track, or the whole track (most accurate) |
+
 ~~
+
+ReplayGain no longer uses quick/prefetch/deep-analysis against YouTube. Gain is measured once as a side effect of real playback (ebur128 on already-fetched audio), with a configurable analysis scope and a volume-gated temporary default for first plays; the old min-volume setting no longer means “don’t calculate.”
 
 | Setting | Description |
 |---|---|
@@ -73,7 +78,7 @@ Settings (Settings → Advanced → YTMusic in the LMS interface):
 | Bridge log level | Log level of the Python bridge process (DEBUG only while troubleshooting). Takes effect on Save without rebuilding the binary. |
 
 
-ReplayGain no longer uses quick/prefetch/deep-analysis against YouTube. Gain is measured once as a side effect of real playback (ebur128 on already-fetched audio), with a configurable analysis scope and a volume-gated temporary default for first plays; the old min-volume setting no longer means “don’t calculate.”
+
 
 
 
