@@ -45,7 +45,9 @@ The Bridge is started and managed automatically by the plugin.
 - **Don't Stop The Music integration** — two modes: Radio (based on the last track) and Mix (based on several of the last tracks in the queue, results mixed alternately between the seeds).
 - **Seeking** — full seek support during playback.
 
+
 ### ReplayGain
+~~
 Tracks served by YouTube often have very different loudness levels, which used to noticeably spoil the experience when listening to a longer playlist without constant supervision. That's why the plugin calculates and applies ReplayGain automatically, without needing to pre-analyze your entire library:
 
 - **Quick measurement** (first ~25s of a track) — applied immediately on first playback and when prefetching tracks in the queue, so it doesn't block playback from starting.
@@ -61,6 +63,19 @@ Settings (Settings → Advanced → YTMusic in the LMS interface):
 | Minimum volume for gain calculation | New gain is calculated only when at least one connected player has volume above this value (0 = always calculated, regardless of volume) |
 | Listening threshold for deep analysis | After what % of a track's actual listening time a more precise analysis is requested |
 | Deep analysis scope | 25 seconds (no deepening — disables the mechanism), half the track, or the whole track (most accurate) |
+~~
+
+| Setting | Description |
+|---|---|
+| Enable Replay GainMaster switch. | Off → no correction and no background measurement (nogain=1). On → cached gain is always applied; unknown tracks may get a temporary default; measurement still runs during playback and fills the cache. |
+| Min. volume to apply default gain | Only when a track has no measured gain yet: above this volume the Default gain value is applied for that first play. Below it, first play has no correction. Does not stop background measurement and does not block applying an already cached gain. 0 = always allow the default on first play. |
+| Default gain until measured | Temporary dB offset for first play of an unmeasured track (when volume is above the threshold). Real measurement runs in the background during that play and is used from the next play onward. Negative = safer (quieter) first listen.Gain analysis scopeHow much of the track to analyze (¼ / ½ / full). Runs in the background on playback of a track without a measurement of this quality or better (typically the first play). Shorter = less CPU. |
+| Bridge log level | Log level of the Python bridge process (DEBUG only while troubleshooting). Takes effect on Save without rebuilding the binary. |
+
+
+ReplayGain no longer uses quick/prefetch/deep-analysis against YouTube. Gain is measured once as a side effect of real playback (ebur128 on already-fetched audio), with a configurable analysis scope and a volume-gated temporary default for first plays; the old min-volume setting no longer means “don’t calculate.”
+
+
 
 ## CLI / JSON-RPC commands (for use with Home Assistant)
 
