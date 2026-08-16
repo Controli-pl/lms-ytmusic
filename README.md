@@ -48,25 +48,21 @@ The Bridge is started and managed automatically by the plugin.
 
 ### ReplayGain
 
-~~
+~~Tracks served by YouTube often have very different loudness levels, which used to noticeably spoil the experience when listening to a longer playlist without constant supervision. That's why the plugin calculates and applies ReplayGain automatically, without needing to pre-analyze your entire library:~~
 
-Tracks served by YouTube often have very different loudness levels, which used to noticeably spoil the experience when listening to a longer playlist without constant supervision. That's why the plugin calculates and applies ReplayGain automatically, without needing to pre-analyze your entire library:
+- ~~**Quick measurement** (first ~25s of a track) — applied immediately on first playback and when prefetching tracks in the queue, so it doesn't block playback from starting.~~
+- ~~**Deep analysis** — once a configured percentage of the track's actually-listened duration is exceeded, the plugin requests a more precise measurement in the background (half the track or the whole track) and remembers it for the future. This fixes cases of tracks with a quiet intro and a loud section later on, where a short analysis produced an inflated gain value. Tracks that are skipped quickly are not re-analyzed — zero unnecessary CPU load.~~
+- ~~**Persistent cache** — calculated gain values are permanently saved by the Bridge (they survive an LMS restart), with increasing quality (quick → half → full track), never degraded downward.~~
+- ~~**Prefetch** — gain for upcoming tracks in the queue is calculated ahead of time, in the background, including for tracks inserted via "Play next".~~
 
-- **Quick measurement** (first ~25s of a track) — applied immediately on first playback and when prefetching tracks in the queue, so it doesn't block playback from starting.
-- **Deep analysis** — once a configured percentage of the track's actually-listened duration is exceeded, the plugin requests a more precise measurement in the background (half the track or the whole track) and remembers it for the future. This fixes cases of tracks with a quiet intro and a loud section later on, where a short analysis produced an inflated gain value. Tracks that are skipped quickly are not re-analyzed — zero unnecessary CPU load.
-- **Persistent cache** — calculated gain values are permanently saved by the Bridge (they survive an LMS restart), with increasing quality (quick → half → full track), never degraded downward.
-- **Prefetch** — gain for upcoming tracks in the queue is calculated ahead of time, in the background, including for tracks inserted via "Play next".
+~~Settings (Settings → Advanced → YTMusic in the LMS interface):~~
 
-Settings (Settings → Advanced → YTMusic in the LMS interface):
-
-| Setting | Description |
+| ~~Setting~~ | ~~Description~~ |
 |---|---|
-| Enable Replay Gain | Main switch — when off, gain is neither calculated nor applied for any track |
-| Minimum volume for gain calculation | New gain is calculated only when at least one connected player has volume above this value (0 = always calculated, regardless of volume) |
-| Listening threshold for deep analysis | After what % of a track's actual listening time a more precise analysis is requested |
-| Deep analysis scope | 25 seconds (no deepening — disables the mechanism), half the track, or the whole track (most accurate) |
-
-~~
+| ~~Enable Replay Gain~~ | ~~Main switch — when off, gain is neither calculated nor applied for any track~~ |
+| ~~Minimum volume for gain calculation~~ | ~~New gain is calculated only when at least one connected player has volume above this value (0 = always calculated, regardless of volume)~~ |
+| ~~Listening threshold for deep analysis~~ | ~~After what % of a track's actual listening time a more precise analysis is requested~~ |
+| ~~Deep analysis scope~~ | ~~25 seconds (no deepening — disables the mechanism), half the track, or the whole track (most accurate)~~ |
 
 ReplayGain no longer uses quick/prefetch/deep-analysis against YouTube. Gain is measured once as a side effect of real playback (ebur128 on already-fetched audio), with a configurable analysis scope and a volume-gated temporary default for first plays; the old min-volume setting no longer means “don’t calculate.”
 
