@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<extensions>
+	<details>
+		<title lang="EN">YTMusic Bridge Repository</title>
+	</details>
+	<plugins>
+		<plugin name="YTMusic" version="0.2.1" minTarget="9.1" maxTarget="*">
+			<title lang="EN">YTMusic</title>
+			<title lang="PL">YTMusic</title>
+			<desc lang="EN">YouTube Music bridge</desc>
+			<desc lang="PL">Bridge do YouTube Music</desc>
+			<creator>Controli</creator>
+			<url>https://github.com/Controli-pl/lms-ytmusic/releases/download/v0.2.1/YTMusic-0.2.1.zip</url>
+			<link>https://github.com/Controli-pl/lms-ytmusic</link>
+			<sha>1eb9c7b42525e51a5998b1b1f1b0838aec7b9f0f</sha>
+			<category>musicservices</category>
+		</plugin>
+	</plugins>
+</extensions>
